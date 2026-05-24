@@ -1,0 +1,25 @@
+
+> my-app@0.1.0 dev /app
+> next dev
+
+▲ Next.js 16.2.6 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://192.168.0.2:3000
+✓ Ready in 530ms
+
+SSR detected. `immediatelyRender` has been set to false to avoid hydration mismatches
+ GET / 200 in 772ms (next.js: 292ms, application-code: 480ms)
+[browser] Next.js detected. `immediatelyRender` defaults to false to avoid hydration mismatches. Pass `immediatelyRender: true` explicitly if you are rendering the editor only on the client. (app/components/CollaborativeEditor.tsx:49:27)
+[browser] Next.js detected. `immediatelyRender` defaults to false to avoid hydration mismatches. Pass `immediatelyRender: true` explicitly if you are rendering the editor only on the client. (app/components/CollaborativeEditor.tsx:49:27)
+[browser] Uncaught RangeError: Schema is missing its top node type ('doc')
+    at Home (app/page.tsx:61:17)
+  59 |             <div className="flex-1 p-6 lg:p-10 bg-gray-50 flex justify-center overflow-y-a...
+  60 |               <div className="w-full max-w-[600px] min-h-full bg-white shadow-md">
+> 61 |                 <CollaborativeEditor />
+     |                 ^
+  62 |               </div>
+  63 |             </div>
+  64 |           </div>
+ GET / 200 in 89ms (next.js: 10ms, application-code: 79ms)
+ ELIFECYCLE  Command failed.
+[?25h
