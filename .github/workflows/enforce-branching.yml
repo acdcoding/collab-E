@@ -4,8 +4,6 @@ on:
   pull_request:
     branches:
       - main
-    paths-ignore:
-      - '.github/workflows/enforce-branching.yml'
 
 jobs:
   enforce-development-to-main:
@@ -13,11 +11,6 @@ jobs:
     steps:
       - name: Check source branch
         run: |
-          if [ "${{ github.event.pull_request.number }}" == "12" ]; then
-            echo "Bypassing branch check for initial setup PR #12."
-            exit 0
-          fi
-
           if [ "${{ github.head_ref }}" != "development" ]; then
             echo "Error: Pull requests to 'main' are only allowed from 'development'."
             echo "Please target your pull request to the 'development' branch instead."
