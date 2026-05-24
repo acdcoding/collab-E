@@ -35,6 +35,15 @@ pnpm dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+## Development Workflow
+
+This project follows a strict branching strategy:
+
+- **`main`**: The stable production release branch. **Do not branch off or merge directly into `main`**.
+- **`development`**: The active development branch. All new features, bug fixes, and changes should be branched off from `development` and merged back into `development`.
+
+Once changes in `development` have been sufficiently tested, they will be merged into `main` to create a new production release.
+
 ## Project Structure
 
 - `app/`: Contains the Next.js application routes and components.
