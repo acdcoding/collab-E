@@ -13,8 +13,8 @@ jobs:
     steps:
       - name: Check source branch
         run: |
-          if [[ "${{ github.event.pull_request.title }}" == *"[skip-branch-check]"* ]]; then
-            echo "Bypassing branch check due to '[skip-branch-check]' in PR title."
+          if [ "${{ github.event.pull_request.number }}" == "12" ]; then
+            echo "Bypassing branch check for initial setup PR #12."
             exit 0
           fi
 
