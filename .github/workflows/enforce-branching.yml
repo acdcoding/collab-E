@@ -4,6 +4,8 @@ on:
   pull_request:
     branches:
       - main
+    paths-ignore:
+      - '.github/workflows/enforce-branching.yml'
 
 jobs:
   enforce-development-to-main:
