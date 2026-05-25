@@ -1,0 +1,3 @@
+## 2024-05-25 - React useEffect infinite loop with state setters
+**Learning:** Found a critical performance bottleneck in `app/components/CollaborativeEditor.tsx` where `useEffect` had state variables `[provider, ydoc]` in its dependency array but was calling `setProvider` and `setYdoc` inside. This triggers an infinite re-render and continuously creates/destroys Y.js documents and WebRTC providers.
+**Action:** Always ensure that `useEffect` hooks responsible for setting up external connections (like WebRTC or WebSockets) use an empty dependency array `[]` (run once on mount) and rely on local variables within the effect for cleanup, rather than referencing React state in the cleanup function.
