@@ -19,11 +19,14 @@ export default function CollaborativeEditor() {
   const [provider, setProvider] = useState<WebrtcProvider | null>(null);
 
   useEffect(() => {
+    let doc: Y.Doc | null = null;
+    let webrtcProvider: WebrtcProvider | null = null;
+
     // Timeout pushes the initialization to the next tick, avoiding the
     // "setState inside useEffect synchronously" anti-pattern in Next.js
     const timer = setTimeout(() => {
-      const doc = new Y.Doc();
-      const webrtcProvider = new WebrtcProvider("email-template-room", doc, {
+      doc = new Y.Doc();
+      webrtcProvider = new WebrtcProvider("email-template-room", doc, {
         signaling: [
           'wss://signaling.yjs.dev',
           'wss://y-webrtc-signaling-eu.herokuapp.com',
@@ -43,12 +46,12 @@ export default function CollaborativeEditor() {
 
     return () => {
       clearTimeout(timer);
-      if (provider && ydoc) {
-        provider.destroy();
-        ydoc.destroy();
+      if (webrtcProvider && doc) {
+        webrtcProvider.destroy();
+        doc.destroy();
       }
     };
-  }, [provider, ydoc]);
+  }, []); // Empty dependency array ensures this runs only once on mount
 
   const editor = useEditor({
     extensions: ydoc && provider ? [
