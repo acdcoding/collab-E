@@ -1,4 +1,4 @@
-## 2024-05-25 - [Add Security Headers]
-**Vulnerability:** Missing security headers (X-Frame-Options, X-Content-Type-Options, etc.)
-**Learning:** Next.js requires manual configuration of security headers in next.config.ts to protect against clickjacking, MIME-sniffing and to enforce HTTPS.
-**Prevention:** Always include a comprehensive security header configuration in next.config.ts for all Next.js projects.
+## 2024-05-26 - [Hardcoded WebRTC Room]
+**Vulnerability:** The Yjs/WebRTC collaborative editor was configured with a hardcoded static room name (`"email-template-room"`).
+**Learning:** This exposes all instances of the application on the same network or signaling server to the same data stream, meaning users who shouldn't have access to others' documents would automatically connect and share data without authorization. In a WebRTC peer-to-peer setup, this constitutes a serious data leakage/authorization bypass vulnerability.
+**Prevention:** When setting up collaboration channels (like WebRTC or WebSockets), always dynamically generate or require unique, authenticated session/room IDs to isolate data properly.
