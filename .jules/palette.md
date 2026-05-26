@@ -1,0 +1,3 @@
+## 2024-05-26 - Email Subject Line Character Limits
+**Learning:** Found that the email builder lacked a clear visual indicator for subject line length, which is critical for email marketing. Without limits, users may write subjects that get truncated in mail clients, reducing open rates. Adding a dynamic counter with accessible warnings (`aria-live`, `aria-invalid`) helps proactively guide users without blocking their workflow.
+**Action:** When designing inputs for content that will be displayed in constrained environments (like email clients or search engine results), always include a character count with a soft limit and accessible warning messages rather than a hard cutoff.
