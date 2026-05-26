@@ -26,8 +26,17 @@ export default function CollaborativeEditor() {
     // Timeout pushes the initialization to the next tick, avoiding the
     // "setState inside useEffect synchronously" anti-pattern in Next.js
     const timer = setTimeout(() => {
+      // SECURITY FIX: Prevent global room sharing by using a unique room ID
+      // If no room is specified in the URL, generate a random one
+      const urlParams = new URLSearchParams(window.location.search);
+      let roomId = urlParams.get('room');
+      if (!roomId) {
+        roomId = `email-room-${crypto.randomUUID()}`;
+        window.history.replaceState({}, '', `?room=${roomId}`);
+      }
+
       doc = new Y.Doc();
-      webrtcProvider = new WebrtcProvider("email-template-room", doc, {
+      webrtcProvider = new WebrtcProvider(roomId, doc, {
         signaling: [
           'wss://signaling.yjs.dev',
           'wss://y-webrtc-signaling-eu.herokuapp.com',
