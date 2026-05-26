@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Collaboration from "@tiptap/extension-collaboration";
@@ -54,8 +54,11 @@ export default function CollaborativeEditor() {
     };
   }, []); // Empty dependency array ensures this runs only once on mount
 
-  const editor = useEditor({
-    extensions: ydoc && provider ? [
+  // Memoize extensions array to prevent deep comparison loop in Tiptap's useEditor hook
+  // which would otherwise cause unnecessary internal updates/renders
+  // since `Collaboration.configure({})` returns a new object every time
+  const extensions = useMemo(() => {
+    return ydoc && provider ? [
       StarterKit,
       Collaboration.configure({
         document: ydoc,
@@ -67,7 +70,11 @@ export default function CollaborativeEditor() {
           color: getRandomColor(),
         },
       }),
-    ] : [StarterKit], // To prevent the 'schema missing its top node' error, supply StarterKit first
+    ] : [StarterKit]; // To prevent the 'schema missing its top node' error, supply StarterKit first
+  }, [ydoc, provider]);
+
+  const editor = useEditor({
+    extensions,
     content: "<p>Hello! Start collaborating on your email template here...</p>",
     immediatelyRender: false,
   });
