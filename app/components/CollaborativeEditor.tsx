@@ -7,6 +7,7 @@ import Collaboration from "@tiptap/extension-collaboration";
 import CollaborationCursor from "@tiptap/extension-collaboration-cursor";
 import * as Y from "yjs";
 import { WebrtcProvider } from "y-webrtc";
+import { Bold, Italic, Heading2 } from "lucide-react";
 
 const colors = ["#958DF1", "#F98181", "#FBBC88", "#FAF594", "#70CFF8", "#94FADB", "#B9F18D"];
 const getRandomColor = () => colors[Math.floor(Math.random() * colors.length)];
@@ -19,11 +20,14 @@ export default function CollaborativeEditor() {
   const [provider, setProvider] = useState<WebrtcProvider | null>(null);
 
   useEffect(() => {
+    let doc: Y.Doc | null = null;
+    let webrtcProvider: WebrtcProvider | null = null;
+
     // Timeout pushes the initialization to the next tick, avoiding the
     // "setState inside useEffect synchronously" anti-pattern in Next.js
     const timer = setTimeout(() => {
-      const doc = new Y.Doc();
-      const webrtcProvider = new WebrtcProvider("email-template-room", doc, {
+      doc = new Y.Doc();
+      webrtcProvider = new WebrtcProvider("email-template-room", doc, {
         signaling: [
           'wss://signaling.yjs.dev',
           'wss://y-webrtc-signaling-eu.herokuapp.com',
@@ -43,12 +47,12 @@ export default function CollaborativeEditor() {
 
     return () => {
       clearTimeout(timer);
-      if (provider && ydoc) {
-        provider.destroy();
-        ydoc.destroy();
+      if (webrtcProvider && doc) {
+        webrtcProvider.destroy();
+        doc.destroy();
       }
     };
-  }, [provider, ydoc]);
+  }, []); // Empty dependency array ensures this runs only once on mount
 
   const editor = useEditor({
     extensions: ydoc && provider ? [
@@ -75,29 +79,38 @@ export default function CollaborativeEditor() {
   return (
     <div className="flex flex-col h-full border border-gray-200 rounded-lg shadow-sm bg-white overflow-hidden">
       <div className="flex items-center justify-between p-4 border-b border-gray-200 bg-gray-50">
-        <div className="flex items-center space-x-2">
-          <div className={`w-2.5 h-2.5 rounded-full ${status === 'Connected' ? 'bg-green-500' : 'bg-red-500'}`}></div>
+        <div className="flex items-center space-x-2" aria-live="polite">
+          <div aria-hidden="true" className={`w-2.5 h-2.5 rounded-full ${status === 'Connected' ? 'bg-green-500' : 'bg-red-500'}`}></div>
           <span className="text-sm font-medium text-gray-700">{status}</span>
         </div>
         {editor && (
           <div className="flex space-x-2">
             <button
               onClick={() => editor.chain().focus().toggleBold().run()}
-              className={`px-3 py-1 text-sm rounded ${editor.isActive('bold') ? 'bg-gray-200 font-bold' : 'hover:bg-gray-100'}`}
+              aria-label="Bold"
+              title="Bold"
+              aria-pressed={editor.isActive('bold')}
+              className={`p-1.5 rounded text-gray-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 ${editor.isActive('bold') ? 'bg-gray-200 text-gray-900' : 'hover:bg-gray-100'}`}
             >
-              Bold
+              <Bold size={18} />
             </button>
             <button
               onClick={() => editor.chain().focus().toggleItalic().run()}
-              className={`px-3 py-1 text-sm rounded ${editor.isActive('italic') ? 'bg-gray-200 italic' : 'hover:bg-gray-100'}`}
+              aria-label="Italic"
+              title="Italic"
+              aria-pressed={editor.isActive('italic')}
+              className={`p-1.5 rounded text-gray-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 ${editor.isActive('italic') ? 'bg-gray-200 text-gray-900' : 'hover:bg-gray-100'}`}
             >
-              Italic
+              <Italic size={18} />
             </button>
             <button
               onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
-              className={`px-3 py-1 text-sm rounded ${editor.isActive('heading', { level: 2 }) ? 'bg-gray-200 font-bold' : 'hover:bg-gray-100'}`}
+              aria-label="Heading 2"
+              title="Heading 2"
+              aria-pressed={editor.isActive('heading', { level: 2 })}
+              className={`p-1.5 rounded text-gray-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 ${editor.isActive('heading', { level: 2 }) ? 'bg-gray-200 text-gray-900' : 'hover:bg-gray-100'}`}
             >
-              H2
+              <Heading2 size={18} />
             </button>
           </div>
         )}
