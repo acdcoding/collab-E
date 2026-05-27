@@ -5,7 +5,12 @@ import dynamic from "next/dynamic";
 
 const CollaborativeEditor = dynamic(() => import("./components/CollaborativeEditor"), {
   ssr: false,
-  loading: () => <div className="p-8 text-center text-gray-500">Loading collaborative editor...</div>,
+  loading: () => (
+    <div className="p-8 flex flex-col items-center justify-center text-gray-500 h-full min-h-[300px]">
+      <div className="w-8 h-8 border-4 border-gray-200 border-t-blue-600 rounded-full animate-spin mb-4" aria-hidden="true"></div>
+      <span className="animate-pulse font-medium">Loading collaborative editor...</span>
+    </div>
+  ),
 });
 
 export default function Home() {
