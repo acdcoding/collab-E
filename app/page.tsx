@@ -23,10 +23,10 @@ export default function Home() {
           <h1 className="text-xl font-semibold">Collaborative Email Builder</h1>
         </div>
         <div className="flex items-center space-x-4 text-sm font-medium">
-          <button className="px-4 py-2 text-gray-600 hover:text-gray-900 transition-colors">
+          <button className="px-4 py-2 text-gray-600 hover:text-gray-900 transition-colors rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500">
             Preview
           </button>
-          <button className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors shadow-sm">
+          <button className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2">
             Export HTML
           </button>
         </div>
@@ -41,7 +41,10 @@ export default function Home() {
             {["Text", "Image", "Button", "Divider", "Spacer", "Social"].map((block) => (
               <div
                 key={block}
-                className="p-3 border border-gray-100 bg-gray-50 rounded cursor-grab hover:bg-gray-100 hover:border-gray-300 transition-all text-sm font-medium flex items-center"
+                role="button"
+                tabIndex={0}
+                draggable={true}
+                className="p-3 border border-gray-100 bg-gray-50 rounded cursor-grab active:cursor-grabbing hover:bg-gray-100 hover:border-gray-300 transition-all text-sm font-medium flex items-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
               >
                 <div className="w-4 h-4 bg-gray-300 rounded-sm mr-3"></div>
                 {block}
