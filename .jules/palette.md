@@ -1,3 +1,9 @@
 ## 2024-05-28 - [Accessible Interactive Elements]
 **Learning:** When making non-button elements (like list items or blocks) interactive, merely adding a visual cursor change is insufficient for accessibility. Adding `role="button"` and `tabIndex={0}` is crucial for screen reader visibility and keyboard navigability, however, this should optimally be paired with keyboard event handlers (`onKeyDown`) to make them fully functional for keyboard users.
 **Action:** Ensure that any element made interactive using ARIA roles and tab indexing also receives the necessary javascript event handlers in future implementations, or log it as a necessary follow up for deeper structural enhancements.
+## 2024-05-26 - Email Subject Line Character Limits
+**Learning:** Found that the email builder lacked a clear visual indicator for subject line length, which is critical for email marketing. Without limits, users may write subjects that get truncated in mail clients, reducing open rates. Adding a dynamic counter with accessible warnings (`aria-live`, `aria-invalid`) helps proactively guide users without blocking their workflow.
+**Action:** When designing inputs for content that will be displayed in constrained environments (like email clients or search engine results), always include a character count with a soft limit and accessible warning messages rather than a hard cutoff.
+## 2026-05-27 - Accurate Color Semantics for Transient States
+**Learning:** Discovered that using a red indicator dot during the initial connection phase of WebRTC/Yjs causes unnecessary alarm, as users interpret red as an error or failure rather than an ongoing process.
+**Action:** Always reserve red strictly for error/disconnected states. For transient, in-progress states like 'Connecting' or 'Loading', use neutral (gray) or warning/progress (amber/yellow) colors, preferably with a subtle animation (like pulse) to signify activity.

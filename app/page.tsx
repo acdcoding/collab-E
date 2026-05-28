@@ -5,14 +5,60 @@ import dynamic from "next/dynamic";
 
 const CollaborativeEditor = dynamic(() => import("./components/CollaborativeEditor"), {
   ssr: false,
-  loading: () => <div className="p-8 text-center text-gray-500">Loading collaborative editor...</div>,
+  loading: () => (
+    <div className="p-8 flex flex-col items-center justify-center text-gray-500 h-full min-h-[300px]">
+      <div className="w-8 h-8 border-4 border-gray-200 border-t-blue-600 rounded-full animate-spin mb-4" aria-hidden="true"></div>
+      <span className="animate-pulse font-medium">Loading collaborative editor...</span>
+    </div>
+  ),
 });
 
-export default function Home() {
+function SubjectInput() {
+  // ⚡ Bolt Performance Optimization: State Colocation
+  // By moving the subject state down into this isolated component,
+  // we prevent the entire Home layout (and its many children) from
+  // re-rendering on every single keystroke.
   const [subject, setSubject] = useState("Your New Collaborative Marketing Campaign");
   const MAX_LENGTH = 50;
   const isOverLimit = subject.length > MAX_LENGTH;
 
+  return (
+    <div className="mb-4 relative">
+      <div className="flex justify-between items-baseline mb-1">
+        <label htmlFor="subject" className="block text-sm font-medium text-gray-700">
+          Email Subject Line
+        </label>
+        <span
+          className={`text-xs ${isOverLimit ? 'text-red-500 font-medium' : 'text-gray-500'}`}
+          aria-live="polite"
+        >
+          {subject.length}/{MAX_LENGTH}
+        </span>
+      </div>
+      <input
+        type="text"
+        id="subject"
+        placeholder="e.g., Exciting news from our team!"
+        className={`w-full px-4 py-2 border rounded-md shadow-sm focus:ring-2 focus:outline-none transition-colors ${
+          isOverLimit
+            ? 'border-red-300 focus:border-red-500 focus:ring-red-500/20'
+            : 'border-gray-300 focus:border-blue-500 focus:ring-blue-500/20'
+        }`}
+        value={subject}
+        onChange={(e) => setSubject(e.target.value)}
+        aria-invalid={isOverLimit}
+        aria-describedby={isOverLimit ? "subject-warning" : undefined}
+      />
+      {isOverLimit && (
+        <p id="subject-warning" className="mt-1.5 text-sm text-red-500" role="alert">
+          Subject line should be {MAX_LENGTH} characters or less to avoid being truncated in mail clients.
+        </p>
+      )}
+    </div>
+  );
+}
+
+export default function Home() {
   return (
     <div className="flex flex-col min-h-screen bg-gray-50 text-gray-900 font-sans">
       <header className="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
@@ -54,38 +100,7 @@ export default function Home() {
         </aside>
 
         <section className="flex-1 flex flex-col">
-          <div className="mb-4 relative">
-            <div className="flex justify-between items-baseline mb-1">
-              <label htmlFor="subject" className="block text-sm font-medium text-gray-700">
-                Email Subject Line
-              </label>
-              <span
-                className={`text-xs ${isOverLimit ? 'text-red-500 font-medium' : 'text-gray-500'}`}
-                aria-live="polite"
-              >
-                {subject.length}/{MAX_LENGTH}
-              </span>
-            </div>
-            <input
-              type="text"
-              id="subject"
-              placeholder="e.g., Exciting news from our team!"
-              className={`w-full px-4 py-2 border rounded-md shadow-sm focus:ring-2 focus:outline-none transition-colors ${
-                isOverLimit
-                  ? 'border-red-300 focus:border-red-500 focus:ring-red-500/20'
-                  : 'border-gray-300 focus:border-blue-500 focus:ring-blue-500/20'
-              }`}
-              value={subject}
-              onChange={(e) => setSubject(e.target.value)}
-              aria-invalid={isOverLimit}
-              aria-describedby={isOverLimit ? "subject-warning" : undefined}
-            />
-            {isOverLimit && (
-              <p id="subject-warning" className="mt-1.5 text-sm text-red-500" role="alert">
-                Subject line should be {MAX_LENGTH} characters or less to avoid being truncated in mail clients.
-              </p>
-            )}
-          </div>
+          <SubjectInput />
 
           <div className="flex-1 bg-white border border-gray-200 shadow-sm rounded-lg flex flex-col min-h-[500px]">
             <div className="bg-gray-100 border-b border-gray-200 p-2 text-center text-xs text-gray-500 font-medium tracking-wide">

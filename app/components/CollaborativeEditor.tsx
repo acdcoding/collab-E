@@ -89,14 +89,19 @@ export default function CollaborativeEditor() {
   });
 
   if (!ydoc || !provider || !editor) {
-    return <div className="p-8 text-center text-gray-500">Loading collaborative editor...</div>;
+    return (
+      <div className="p-8 flex flex-col items-center justify-center text-gray-500 h-full min-h-[300px]">
+        <div className="w-8 h-8 border-4 border-gray-200 border-t-blue-600 rounded-full animate-spin mb-4" aria-hidden="true"></div>
+        <span className="animate-pulse font-medium">Loading collaborative editor...</span>
+      </div>
+    );
   }
 
   return (
     <div className="flex flex-col h-full border border-gray-200 rounded-lg shadow-sm bg-white overflow-hidden">
       <div className="flex items-center justify-between p-4 border-b border-gray-200 bg-gray-50">
         <div className="flex items-center space-x-2" aria-live="polite">
-          <div aria-hidden="true" className={`w-2.5 h-2.5 rounded-full ${status === 'Connected' ? 'bg-green-500' : 'bg-red-500'}`}></div>
+          <div aria-hidden="true" className={`w-2.5 h-2.5 rounded-full ${status === 'Connected' ? 'bg-green-500' : status === 'Connecting...' ? 'bg-amber-400 animate-pulse' : 'bg-red-500'}`}></div>
           <span className="text-sm font-medium text-gray-700">{status}</span>
         </div>
         {editor && (
